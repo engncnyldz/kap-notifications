@@ -1,0 +1,9 @@
+__pycache__
+venv/
+.env
+.vscode
+celerybeat-schedule.db
+logs/
+local-docker-run-env
+.pytest_cache
+docker-compose-local.yml
