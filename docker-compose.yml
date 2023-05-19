@@ -8,20 +8,20 @@ services:
     ports:
       - 3002:3002
     environment:
-      - DATABASE_HOSTNAME=
-      - DATABASE_PORT=
-      - DATABASE_NAME=
-      - DATABASE_USERNAME=
-      - DATABASE_PASSWORD=
-      - KAP_MEMBERS_APP_URL=
+      - DATABASE_HOSTNAME=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - KAP_MEMBERS_APP_URL=http://members-api:3001
       - AWS_ACCESS_KEY_ID=
       - AWS_SECRET_ACCESS_KEY=
       - AWS_DEFAULT_REGION=
       - AWS_SES_SENDER=
       - AWS_SES_RECEIVER=
       - AWS_SES_REGION=
-      - CELERY_BROKER=
-      - CELERY_BACKEND=
+      - CELERY_BROKER=redis://cache:6379/0
+      - CELERY_BACKEND=redis://cache:6379/1
     volumes:
       - kap-disclosures-logs:/app/kap-disclosures/logs
   celery:
@@ -32,28 +32,28 @@ services:
     volumes:
       - kap-disclosures-logs:/app/kap-disclosures/logs
     environment:
-      - DATABASE_HOSTNAME=
-      - DATABASE_PORT=
-      - DATABASE_NAME=
-      - DATABASE_USERNAME=
-      - DATABASE_PASSWORD=
-      - KAP_MEMBERS_APP_URL=
+      - DATABASE_HOSTNAME=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - KAP_MEMBERS_APP_URL=http://members-api:3001
       - AWS_ACCESS_KEY_ID=
       - AWS_SECRET_ACCESS_KEY=
       - AWS_DEFAULT_REGION=
       - AWS_SES_SENDER=
       - AWS_SES_RECEIVER=
       - AWS_SES_REGION=
-      - CELERY_BROKER=
-      - CELERY_BACKEND=
+      - CELERY_BROKER=redis://cache:6379/0
+      - CELERY_BACKEND=redis://cache:6379/1
     command: celery -A app.tasks worker --loglevel=INFO -B -n kap-disclosure-worker@%n -Q kap-disclosure-queue
   db:
     image: postgres
     environment:
-      - POSTGRES_DB=
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=
-      - PGDATA=
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data
     ports:
       - 5432:5432
     volumes:
@@ -65,11 +65,11 @@ services:
     ports:
       - 3001:3001
     environment:
-      - DATABASE_HOSTNAME=
-      - DATABASE_PORT=
-      - DATABASE_NAME=
-      - DATABASE_USERNAME=
-      - DATABASE_PASSWORD=
+      - DATABASE_HOSTNAME=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
   cache:
     image: redis
     ports:
