@@ -11,4 +11,4 @@ gunicorn.service
 .gitignore
 */app.log*
 local-docker-run-env
-docker-compose.yml
+docker-compose*.yml
